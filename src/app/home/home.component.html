@@ -1,3 +1,20 @@
 <p>
   Home Works!
 </p>
+<div>
+	<cmp-l1 [list]="list"></cmp-l1>
+</div>
+<div>
+	<button (click)="addItem()">add item</button>
+</div>
+
+<div *ngFor="let item of list">
+	<item-list-change [item]="item"></item-list-change>
+</div>
+
+
+<div>
+	<button (click)="addObject()">add Object</button>
+</div>
+
+<object-list [objectList]="objectList"></object-list>
