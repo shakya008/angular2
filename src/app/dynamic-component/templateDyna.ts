@@ -1,5 +1,5 @@
-import {Component, ComponentResolver, ViewContainerRef, OnInit, ComponentFactory, Directive, TemplateRef, Input} from "@angular/core"
-
+import {Component, ComponentResolver, ViewContainerRef, OnInit, ComponentFactory, Directive, TemplateRef, Input, ElementRef, ViewChild} from "@angular/core"
+import {ElemPosition} from "../shared/ElemPositionService";
 
 @Directive({
     selector: '[doLoad]',
@@ -13,7 +13,6 @@ export class DoLoad {
     }
 
      constructor(private _vr: ViewContainerRef, private _tr: TemplateRef<any>) {
-    console.log("sdghj");
   }
 
   ngOnChanges(changes) {
@@ -32,25 +31,43 @@ export class DoLoad {
 	selector: 'dyna-2p',
 	template: `
 	<div>
+    <div #popover>
     <ng-content select="on-text"></ng-content>
+    </div>
+    <div #popoverDiv [style.top]="top + 'px'"
+     [style.left]="left + 'px'"
+    [style.position]="'absolute'"
+     >
     <template [doLoad]="show">
         <ng-content select="popover-content"></ng-content>
         </template>
+        </div>
 	</div>
 	`,
 	host: {
 		"(mouseenter)" : "mouseEntered($event)",
 		"(mouseleave)" : "mouseleft($event)"
 	},
-    directives: [DoLoad]
+    directives: [DoLoad],
+    providers: [ElemPosition]
 })
 export class Dyna2P implements OnInit{
-    public show:boolean =false;
-    constructor(private _vcr: ViewContainerRef, private _cr: ComponentResolver) {}
+    public show: boolean =false;
+    public top: number= -1;
+    public left: number= -1;
+    constructor(private _vcr: ViewContainerRef, private _cr: ComponentResolver, private elPos: ElemPosition) {}
     ngOnInit(){
-    	//this.resolver.resolveComponent(PopoverContent).then((factory: ComponentFactory<any>) => {
+    	const p =  this.elPos.positionElements(this.popover.nativeElement, this.popoverDiv.nativeElement, "bottom");
+        this.top = p.top;
+        this.left = p.left;
+        console.log(p);
 
     }
+    @ViewChild("popoverDiv")
+    popoverDiv: ElementRef;
+
+    @ViewChild("popover")
+    popover: ElementRef;
 
     /*createCmp(){
     	this._cr.resolveComponent(DoLoad)
@@ -62,6 +79,10 @@ export class Dyna2P implements OnInit{
     mouseEntered($event){
     	//this.createCmp();
         this.show = true;
+        /*const p = this.elPos.positionElements(this.popover.nativeElement, this.popoverDiv.nativeElement, "bottom");
+        console.log(p);*/
+
+
     }
     mouseleft($event){
     	//this._vcr.clear();
