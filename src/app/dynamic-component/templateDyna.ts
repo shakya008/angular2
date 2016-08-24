@@ -1,4 +1,5 @@
-import {Component, ComponentResolver, ViewContainerRef, OnInit, ComponentFactory, Directive, TemplateRef, Input, ElementRef, ViewChild} from "@angular/core"
+import {Component, ComponentResolver, ViewContainerRef, OnInit, ComponentFactory,
+ Directive, TemplateRef, Input, ElementRef, ViewChild, ChangeDetectionStrategy} from "@angular/core"
 import {ElemPosition} from "../shared/ElemPositionService";
 
 @Directive({
@@ -31,7 +32,7 @@ export class DoLoad {
 	selector: 'dyna-2p',
 	template: `
 	<div>
-    <div #popover>
+    <div #popover style="min-width:200px">
     <ng-content select="on-text"></ng-content>
     </div>
     <div #popoverDiv [style.top]="top + 'px'"
@@ -49,12 +50,14 @@ export class DoLoad {
 		"(mouseleave)" : "mouseleft($event)"
 	},
     directives: [DoLoad],
-    providers: [ElemPosition]
+    providers: [ElemPosition],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Dyna2P implements OnInit{
     public show: boolean =false;
     public top: number= -1;
     public left: number= -1;
+    @Input() title: string
     constructor(private _vcr: ViewContainerRef, private _cr: ComponentResolver, private elPos: ElemPosition) {}
     ngOnInit(){
     	const p =  this.elPos.positionElements(this.popover.nativeElement, this.popoverDiv.nativeElement, "bottom");
@@ -86,7 +89,7 @@ export class Dyna2P implements OnInit{
     }
     mouseleft($event){
     	//this._vcr.clear();
-        //this.show = false;
+        this.show = false;
     }
 }
 

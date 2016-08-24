@@ -41,9 +41,9 @@ public objectList=[
 ]
 
 public addObject(){
-	//this.objectList.push({"name":"Mohan", "id":3});
-	var newObj = this.objectList.slice(0);
+	this.objectList.push({"name":"Mohan", "id":3});
+	/*var newObj = this.objectList.slice(0);
 	newObj.push({"name":"Mohan", "id":3});
-	this.objectList = newObj;
+	this.objectList = newObj;*/
 }
 }

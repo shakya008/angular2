@@ -5,7 +5,7 @@ import {Component, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 	template: `
     <div>{{item.name}}</div>
 	`,
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.Default
 })
 export class ShowItem {
 	private _item:string;
@@ -16,7 +16,7 @@ export class ShowItem {
 	}
 	set item(v){
 		this._item = v;
-		console.log(this._item);
+		//console.log(this._item);
 	}
 
 }
